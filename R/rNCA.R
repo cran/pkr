@@ -1,4 +1,4 @@
-rNCA = function(ex, pc, study="", trt="", id="", analyte="", codeBQL=c("< 0", "NQ", "BQL", "BQoL", "<LOQ"), MinPoints=5)
+rNCA = function(ex, pc, study="", trt="", id="", analyte="", codeBQL=c("< 0", "NQ", "BQL", "BQoL", "<LOQ"), fit="Linear", MinPoints=5)
 {
   for (i in 1:ncol(ex)) {
     ex[,i] = Trim(as.character(ex[,i]))
@@ -54,7 +54,7 @@ rNCA = function(ex, pc, study="", trt="", id="", analyte="", codeBQL=c("< 0", "N
       if (nAnal == 1) {
         if (sum(as.numeric(PCy[,"PCSTRESN"]) > 0) > MinPoints) {
 #print(paste(i))
-          Res0 = NCA0(EXi[1,], PCy)
+          Res0 = NCA0(EXi[1,], PCy, fit=fit)
           tName = names(Res0)
           Res1 = c(cStudy, cSubj, cTrt, analyte[1], cRefTime, Res0)
           names(Res1) = c("STUDYID", "USUBJID", "EXTRT", "PCTESTCD", "PCRFTDTC", tName)
@@ -66,7 +66,7 @@ rNCA = function(ex, pc, study="", trt="", id="", analyte="", codeBQL=c("< 0", "N
           PCy2 = PCy[PCy[,"PCTESTCD"] == cAnalyte,]
           if (sum(as.numeric(PCy2[,"PCSTRESN"]) > 0) > MinPoints) {
 #print(paste(i,j))
-            Res0 = NCA0(EXi[1,], PCy2)
+            Res0 = NCA0(EXi[1,], PCy2, fit=fit)
             tName = names(Res0)
             Res1 = c(cStudy, cSubj, cTrt, cAnalyte, cRefTime, Res0)
             names(Res1) = c("STUDYID", "USUBJID", "EXTRT", "PCTESTCD", "PCRFTDTC", tName)
@@ -94,7 +94,7 @@ rNCA = function(ex, pc, study="", trt="", id="", analyte="", codeBQL=c("< 0", "N
             }
             if (sum(as.numeric(PCy[,"PCSTRESN"]) > 0) > MinPoints) {
 #print(paste(i,j))
-              Res0 = NCA0(EXi[j,], PCy)
+              Res0 = NCA0(EXi[j,], PCy, fit=fit)
               tName = names(Res0)
               Res1 = c(cStudy, cSubj, cTrt, analyte[1], cRefTime, Res0)
               names(Res1) = c("STUDYID", "USUBJID", "EXTRT", "PCTESTCD", "PCRFTDTC", tName)
@@ -115,7 +115,7 @@ rNCA = function(ex, pc, study="", trt="", id="", analyte="", codeBQL=c("< 0", "N
               }
               if (sum(as.numeric(PCy[,"PCSTRESN"]) > 0) > MinPoints) {
 #print(paste(i,j,k))
-                Res0 = NCA0(EXi[j,], PCy)
+                Res0 = NCA0(EXi[j,], PCy, fit=fit)
                 tName = names(Res0)
                 Res1 = c(cStudy, cSubj, cTrt, cAnalyte, cRefTime, Res0)
                 names(Res1) = c("STUDYID", "USUBJID", "EXTRT", "PCTESTCD", "PCRFTDTC", tName)
@@ -134,7 +134,7 @@ rNCA = function(ex, pc, study="", trt="", id="", analyte="", codeBQL=c("< 0", "N
             }
             if (sum(as.numeric(PCy[,"PCSTRESN"]) > 0) > MinPoints) {
 #print(paste(i,j))
-              Res0 = NCA0(EXi[j,], PCy)
+              Res0 = NCA0(EXi[j,], PCy, fit=fit)
               tName = names(Res0)
               Res1 = c(cStudy, cSubj, cTrt, analyte[1], cRefTime, Res0)
               names(Res1) = c("STUDYID", "USUBJID", "EXTRT", "PCTESTCD", "PCRFTDTC", tName)
@@ -152,7 +152,7 @@ rNCA = function(ex, pc, study="", trt="", id="", analyte="", codeBQL=c("< 0", "N
               }
               if (sum(as.numeric(PCy[,"PCSTRESN"]) > 0) > MinPoints) {
 #print(paste(i,j,k))
-                Res0 = NCA0(EXi[j,], PCy)
+                Res0 = NCA0(EXi[j,], PCy, fit=fit)
                 tName = names(Res0)
                 Res1 = c(cStudy, cSubj, cTrt, cAnalyte, cRefTime, Res0)
                 names(Res1) = c("STUDYID", "USUBJID", "EXTRT", "PCTESTCD", "PCRFTDTC", tName)

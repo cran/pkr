@@ -4,10 +4,11 @@
 \description{
 This performs Noncompartmental Analysis(NCA) for only one subject from the CDISC EX and PC domain.
 }
-\usage{NCA0(EX0, PC0)}
+\usage{NCA0(EX0, PC0, fit="Linear")}
 \arguments{
   \item{EX0}{Data of one subject from EX domain}
   \item{PC0}{Data of one subject from PC domain}
+  \item{fit}{either of \code{"Linear"} or \code{"Log"} to indicate the way to calculate AUC and AUMC}
 }
 \details{
 This calls IndiNCA function.

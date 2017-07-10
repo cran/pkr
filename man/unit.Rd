@@ -22,9 +22,7 @@ It is called by \code{IndiNCA}.
   \item{[1]}{unit character}
   \item{[2]}{conversion factor}
 }
-\author{
-Kyun-Seop Bae <k@acr.kr>
-}
+\author{Kyun-Seop Bae <k@acr.kr>}
 
 \seealso{
 \code{\link{IndiNCA}}

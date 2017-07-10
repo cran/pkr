@@ -23,7 +23,7 @@ This function returns AUC and AUMC by linear-up log-down method.
 }
 }
 \author{Kyun-Seop Bae <k@acr.kr>}
-\seealso{\code{\link{LinAUC}},\code{\link{AUC}}}
+\seealso{\code{\link{LinAUC}}, \code{\link{AUC}}}
 \examples{
 LogAUC(Theoph[Theoph$Subject==1, "Time"],Theoph[Theoph$Subject==1, "conc"])
 # Compare the last line with the above

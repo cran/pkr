@@ -20,7 +20,7 @@ Return a table of cumulative values.
 }
 \references{Rowland M, Tozer TN. Clinical Pharmacokinetics and Pharmacodynamics - Concepts and Applications. 4th ed. pp687-689. 2011.}
 \author{Kyun-Seop Bae <k@acr.kr>}
-\seealso{\code{\link{LinAUC}},\code{\link{LogAUC}}}
+\seealso{\code{\link{LinAUC}}, \code{\link{LogAUC}}}
 \examples{
 AUC(Theoph[Theoph$Subject==1, "Time"],Theoph[Theoph$Subject==1, "conc"]) # Default is "Linear"
 AUC(Theoph[Theoph$Subject==1, "Time"],Theoph[Theoph$Subject==1, "conc"], fit="Log")

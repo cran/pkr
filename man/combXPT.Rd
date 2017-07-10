@@ -15,5 +15,5 @@ You may specify one or more folders to find the domain XPT files.
   \item{XPT}{combined table}
 }
 \author{Kyun-Seop Bae <k@acr.kr>}
-\seealso{\code{\link{help}},\code{\link{readEX}},\code{\link{readPC}}}
+\seealso{\code{\link{help}}, \code{\link{readEX}}, \code{\link{readPC}}}
 \keyword{XPT}

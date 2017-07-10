@@ -4,7 +4,7 @@
 \description{This performs NCA from the CDISC EX and PC datasets.}
 \usage{
 rNCA(ex, pc, study = "", trt = "", id = "", analyte = "", 
-     codeBQL = c("< 0", "NQ", "BQL", "BQoL", "<LOQ"), MinPoints = 5)
+     codeBQL = c("< 0", "NQ", "BQL", "BQoL", "<LOQ"), fit="Linear", MinPoints = 5)
 }
 \arguments{
   \item{ex}{EX domain data, usually from the \code{loadEXPC}}
@@ -14,6 +14,7 @@ rNCA(ex, pc, study = "", trt = "", id = "", analyte = "",
   \item{id}{vector of subject IDs in USUBJID to do NCA}
   \item{analyte}{vector of molecular species in PCTESTCD to do NCA}
   \item{codeBQL}{symbols of below the quantitation limit}
+  \item{fit}{either of \code{"Linear"} or \code{"Log"} to indicate the way to calculate AUC and AUMC}
   \item{MinPoints}{minimum number of sampling points for NCA}
 }
 \details{

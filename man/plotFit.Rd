@@ -37,11 +37,7 @@ This function calles \code{BestSlope} function.
 }
 
 \author{Jee Eun Lee <JeeEun.Lee@fda.hhs.gov>}
-
-
-\seealso{
-\code{\link{BestSlope}}
-}
+\seealso{\code{\link{BestSlope}}}
 \examples{
 plotFit(Theoph, "Subject", "Time", "conc", ID="1")
 plotFit(Indometh, "Subject", "time", "conc", adm="Bolus", ID="1")
