@@ -1,24 +1,26 @@
-\name{IndiNCA}
-\alias{IndiNCA}
-\title{Noncompartmental Analysis for an Individual}
-\description{It performs a noncompartmental analysis with one subject data. This will be deprecated. Use \code{sNCA()} instead.}
-\usage{IndiNCA(x, y, dose = 0, fit = "Linear", adm = "Extravascular", dur = 0,
-               report = "Table", iAUC = "", uTime = "h", uConc = "ug/L", uDose = "mg")}
-\arguments{
-  \item{x}{vector values of independent variable, usually time}
-  \item{y}{vector values of dependent variable, usually concentration}
-  \item{dose}{administered dose for the subject}
-  \item{fit}{either of \code{"Linear"} or \code{"Log"} to indicate the way to calculate AUC and AUMC}
-  \item{adm}{one of \code{"Bolus"} or \code{"Infusion"} or \code{"Extravascular"} to indicate drug administration mode}
-  \item{dur}{infusion duration for constant infusion, otherwise 0}
-  \item{report}{either of \code{"Table"} or \code{"Text"} to specify the type of return value}
-  \item{iAUC}{data.frame with three columns, "Name", "Start", "End" to specify the invervals for partial (interval) AUC}
-  \item{uTime}{unit of time}
-  \item{uConc}{unit of concentration}
-  \item{uDose}{unit of dose}
+\name{rtfNCA}
+\alias{rtfNCA}
+\title{NCA output to rtf file}
+\description{This output NCA result in a rtf file.}
+\usage{
+rtfNCA(fileName = "Temp-NCA.rtf", concData, colSubj = "Subject", colTime = "Time", 
+       colConc = "conc", dose = 0, adm = "Extravascular", dur = 0, doseUnit = "mg", 
+       timeUnit = "h", concUnit = "ug/L", down="Linear", MW = 0)
 }
-\details{
-  This performs a noncompartmental analysis for a subject. It returns practically the same result with the most popular commercial software.
+\arguments{
+  \item{fileName}{file name to save}
+  \item{concData}{concentration data table}
+  \item{colSubj}{column name for subject ID}
+  \item{colTime}{column name for time}
+  \item{colConc}{column name for concentration}
+  \item{dose}{administered dose}
+  \item{adm}{one of \code{"Bolus"} or \code{"Infusion"} or \code{"Extravascular"} to indicate drug administration mode}
+  \item{dur}{duration of infusion}
+  \item{doseUnit}{unit of dose}
+  \item{timeUnit}{unit of time}
+  \item{concUnit}{unit of concentration}
+  \item{down}{either of \code{"Linear"} or \code{"Log"} to indicate the way to calculate AUC and AUMC}
+  \item{MW}{molecular weight of drug}
 }
 \value{
   \item{CMAX}{maximum concentration, Cmax}
@@ -69,37 +71,15 @@
   \item{VSSO}{volume of distribution at steady state using CLST, for intravascular administration only}
   \item{VSSP}{volume of distribution at stead state using CLSTP, for intravascular administration only}
 }
-\references{
-\enumerate{
-\item Gabrielsson J, Weiner D. Pharmacokinetic and Pharmacodynamic Data Analysis - Concepts and Applications. 5th ed. 2016.
-\item Shargel L, Yu A. Applied Biopharmaceutics and Pharmacokinetics. 7th ed. 2015. 
-\item Rowland M, Tozer TN. Clinical Pharmacokinetics and Pharmacodynamics - Concepts and Applications. 4th ed. 2011.
-\item Gibaldi M, Perrier D. Pharmacokinetics. 2nd ed. revised and expanded. 1982.
-}
-}
 \author{Kyun-Seop Bae <k@acr.kr>}
-\seealso{\code{\link{AUC}}, \code{\link{BestSlope}}}
-\examples{
-IndiNCA(Theoph[Theoph$Subject==1,"Time"], Theoph[Theoph$Subject==1, "conc"], dose=320, uConc="mg/L")
-IndiNCA(Indometh[Indometh$Subject==1,"time"], Indometh[Indometh$Subject==1, "conc"], dose=25,
-        adm="Bolus", uConc="mg/L")
-IndiNCA(Indometh[Indometh$Subject==1,"time"], Indometh[Indometh$Subject==1, "conc"], dose=25,
-        adm="Infusion", dur=0.25, uConc="mg/L")
-
-IndiNCA(Theoph[Theoph$Subject==1,"Time"], Theoph[Theoph$Subject==1, "conc"], dose=320,
-        report="Text", uConc="mg/L")
-IndiNCA(Indometh[Indometh$Subject==1,"time"], Indometh[Indometh$Subject==1, "conc"], dose=25,
-        adm="Bolus", report="Text", uConc="mg/L")
-IndiNCA(Indometh[Indometh$Subject==1,"time"], Indometh[Indometh$Subject==1, "conc"], dose=25,
-        adm="Infusion", dur=0.25, report="Text", uConc="mg/L")
-
-iAUC = data.frame(Name=c("AUC[0-12h]","AUC[0-24h]"), Start=c(0,0), End=c(12,24)) ; iAUC
-IndiNCA(Theoph[Theoph$Subject==1,"Time"], Theoph[Theoph$Subject==1, "conc"], dose=320,
-        iAUC=iAUC, uConc="mg/L")
-IndiNCA(Indometh[Indometh$Subject==1,"time"], Indometh[Indometh$Subject==1, "conc"], dose=25,
-        adm="Bolus", iAUC=iAUC, uConc="mg/L")
-IndiNCA(Indometh[Indometh$Subject==1,"time"], Indometh[Indometh$Subject==1, "conc"], dose=25,
-        adm="Infusion", dur=0.25, iAUC=iAUC, uConc="mg/L")
+\seealso{
+\code{\link{help}}, \code{\link{txtNCA}}, \code{\link{pdfNCA}} 
 }
-\keyword{NCA}
-\keyword{noncompartmenal analysis}
+\examples{
+#rtfNCA(fileName="NCA-Theoph.rtf", Theoph, colSubj="Subject", colTime="Time", 
+#       colConc="conc", dose=320, doseUnit="mg", timeUnit="h", concUnit="mg/L")
+#rtfNCA(fileName="NCA-Indometh.rtf", Indometh, colSubj="Subject", colTime="time", 
+#       colConc="conc", adm="Infusion", dur=0.5, dose=25, doseUnit="mg", 
+#       timeUnit="h", concUnit="mg/L")
+}
+\keyword{Output Form}
