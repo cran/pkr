@@ -1,7 +1,7 @@
 BestSlope = function(x, y, adm="Extravascular", TOL=1e-4)
 {
 # Author: Kyun-Seop Bae k@acr.kr
-# Last modification: 2017.7.19
+# Last modification: 2020.5.7
 # Called by : sNCA
 # Calls : Slope, UT
 # INPUT
@@ -50,7 +50,7 @@ BestSlope = function(x, y, adm="Extravascular", TOL=1e-4)
     tmpMat[i - locStart + 1,] = Slope(x[i:locLast], log(y[i:locLast]))
   }
   tmpMat = tmpMat[tmpMat[,"LAMZNPT"] > 2,,drop=FALSE]
-  if (is.matrix(tmpMat) & nrow(tmpMat) > 0) {
+  if (nrow(tmpMat) > 0) {
     maxAdjRsq = max(tmpMat[,"R2ADJ"])
     OKs = ifelse(abs(maxAdjRsq - tmpMat[,"R2ADJ"]) < TOL, TRUE, FALSE)
     nMax = max(tmpMat[OKs,"LAMZNPT"])
@@ -58,6 +58,10 @@ BestSlope = function(x, y, adm="Extravascular", TOL=1e-4)
   } else {
     Result["LAMZNPT"] = 0
   }
-
+  if (Result["LAMZNPT"] > 0) {
+    attr(Result, "UsedPoints") = which(x==Result["LAMZLL"]):which(x==Result["LAMZUL"])
+  } else {
+    attr(Result, "UsedPoints") = NULL
+  }
   return(Result)
 }

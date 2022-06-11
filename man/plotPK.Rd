@@ -35,7 +35,7 @@ This function saves pdf files and tiff files in the \code{outdir} folder.
 
 \seealso{\code{\link{NCA}}}
 \examples{
-plotPK(Theoph, "Subject", "Time", "conc", unitTime="hr", unitConc="mg/L", dose=320)
-plotPK(Indometh, "Subject", "time", "conc", unitTime="hr", unitConc="mg/L", adm="Bolus", dose=25)
+# plotPK(Theoph, "Subject", "Time", "conc", unitTime="hr", unitConc="mg/L", dose=320)
+# plotPK(Indometh, "Subject", "time", "conc", unitTime="hr", unitConc="mg/L", adm="Bolus", dose=25)
 }
 \keyword{Plot}

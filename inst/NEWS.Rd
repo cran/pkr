@@ -1,5 +1,10 @@
 \name{NEWS}
 \title{News for Package \pkg{pkr}}
+\section{Version 0.1.3 (2020-05-07)}{
+  \itemize{
+    \item{Column order bug with bolus infusion fixed.}
+  }
+}
 \section{Version 0.1.2 (2018-06-04)}{
   \itemize{
     \item{Deprecated option in \code{Sys.timezone()} is removed.}
