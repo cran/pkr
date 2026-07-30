@@ -1,7 +1,7 @@
 Subset = function(Tbl, key, Cond)
 {
 # Author: Kyun-Seop Bae k@acr.kr
-# Last modification: 2017.8.4
+# Last modification: 2026.7.29
 # Input
 #  Tbl: table to be subsetted
 #  key: column names for the condition
@@ -11,13 +11,15 @@ Subset = function(Tbl, key, Cond)
 
   nCol = length(key)
   if (length(Cond) != nCol) stop("key and Cond should be same length!")
-  nRow = nrow(Tbl)
-  vRow = rep(TRUE, nRow)
-  
-  for (i in 1:nRow) {
-    for (j in 1:nCol) {
-      if (as.character(Tbl[i,key[j]]) != as.character(Cond[j])) vRow[i] = FALSE
-    }
+  missingKey = setdiff(key, colnames(Tbl))
+  if (length(missingKey) > 0) stop(paste("No such column:", paste(missingKey, collapse=", ")))
+
+# One vectorised comparison per key column instead of a scalar comparison per
+# cell: the old double loop ran nrow(Tbl) * length(key) R-level iterations.
+  vRow = rep(TRUE, nrow(Tbl))
+  for (j in seq_len(nCol)) {
+    vRow = vRow & (as.character(Tbl[,key[j]]) == as.character(Cond[j]))
   }
-  return(Tbl[vRow,])
+  vRow[is.na(vRow)] = FALSE
+  return(Tbl[vRow, , drop=FALSE])
 }

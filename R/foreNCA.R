@@ -1,16 +1,22 @@
 foreNCA = function(NCAres="", PPTESTCD="", PCTESTCD="", title="", ...)
-{ 
+{
+  if (!requireNamespace("forestplot", quietly=TRUE)) stop("Package 'forestplot' is needed for foreNCA(). Please install it with install.packages('forestplot').")
+
   cPara = PPTESTCD
+  needCol = c("PCTESTCD", "STUDYID", "Dose", "UnitDose", "UnitConc", cPara)
+  missingCol = setdiff(needCol, colnames(NCAres))
+  if (length(missingCol) > 0) stop(paste("NCAres has no column:", paste(missingCol, collapse=", ")))
+
   MOLEs = sort(as.character(unique(NCAres[,"PCTESTCD"]))) ; nMOLE = length(MOLEs)
   STUDYs = sort(as.character(unique(NCAres[,"STUDYID"]))) ; nSTUDY = length(STUDYs)
   DOSEs = sort(unique(NCAres[,"Dose"])) ; nDOSE = length(DOSEs)
 
   ForRes = c("Molecule", "Study", "Dose", "Mean", "SD")
-  for (i in 1:nMOLE) {
+  for (i in seq_len(nMOLE)) {
     cMOLE = MOLEs[i]
-    for (j in 1:nSTUDY) {
+    for (j in seq_len(nSTUDY)) {
       cSTUDY = STUDYs[j]
-      for (k in 1:nDOSE) {
+      for (k in seq_len(nDOSE)) {
         cDOSE = DOSEs[k]
         cData = NCAres[NCAres[,"PCTESTCD"]==cMOLE & NCAres[,"STUDYID"]==cSTUDY & NCAres[,"Dose"] == cDOSE, cPara]
         if (length(cData) > 0) {
@@ -26,7 +32,9 @@ foreNCA = function(NCAres="", PPTESTCD="", PCTESTCD="", title="", ...)
   unitConc = unique(as.character(NCAres[,"UnitConc"]))
   unitPara = as.character(Unit(code=PPTESTCD, timeUnit="h", concUnit=unitConc, doseUnit=unitDose)[1])
 
-  For1 = ForRes[ForRes[,1] == PCTESTCD,]
+  if (is.null(dim(ForRes)) || nrow(ForRes) < 2) stop("No group in NCAres has a value for this parameter!")
+  For1 = ForRes[ForRes[,1] == PCTESTCD, , drop=FALSE]
+  if (nrow(For1) == 0) stop(paste0("No record with PCTESTCD == '", PCTESTCD, "' in NCAres!"))
   cMean = c(NA, NA, as.numeric(For1[,4]))
   cLL = c(NA, NA, as.numeric(For1[,4]) - 2*as.numeric(For1[,5]))
   cUL = c(NA, NA, as.numeric(For1[,4]) + 2*as.numeric(For1[,5]))

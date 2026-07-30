@@ -3,8 +3,9 @@
 \title{Simplest NCA}
 \description{This is the work-horse function for NCA.}
 \usage{
-sNCA(x, y, dose = 0, adm = "Extravascular", dur = 0, doseUnit = "mg", timeUnit = "h", 
-     concUnit = "ug/L", iAUC = "", down = "Linear", MW = 0, returnNA = TRUE)
+sNCA(x, y, dose = 0, adm = "Extravascular", dur = 0, doseUnit = "mg", timeUnit = "h",
+     concUnit = "ug/L", iAUC = "", down = "Linear", MW = 0, returnNA = TRUE,
+     UsePoints = NULL)
 }
 \arguments{
   \item{x}{usually time}
@@ -19,6 +20,7 @@ sNCA(x, y, dose = 0, adm = "Extravascular", dur = 0, doseUnit = "mg", timeUnit =
   \item{down}{either of \code{"Linear"} or \code{"Log"} to indicate the way to calculate AUC and AUMC}
   \item{MW}{molecular weight of the drug}
   \item{returnNA}{if \code{returnNA} is \code{TRUE}, it returns NA values also.}
+  \item{UsePoints}{indices into \code{x} and \code{y}, counted after non-finite points are dropped, to be used for the terminal slope in place of the automatic search. \code{NULL} leaves the automatic selection in place. \code{y} at those indices must be positive.}
 }
 \details{
   This will replace \code{IndiNCA}.

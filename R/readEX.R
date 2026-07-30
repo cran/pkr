@@ -6,19 +6,19 @@ readEX = function(folders)
   DoseUnit =  unique(Trim(EX[,"EXDOSU"]))
   DoseUnit = DoseUnit[nchar(DoseUnit) > 0]
   if (length(DoseUnit) != 1) warning("Dose unit is missing or various!")
-   
+
 # Dosing unit should not be composite one like mg/kg, mg/m2
-  if (length(strsplit(DoseUnit, "/")[[1]]) != 1) stop("Dose unit should not be based on body weight or BSA!")     
+# (guard so a missing/various unit warns above instead of erroring here)
+  if (any(lengths(strsplit(DoseUnit, "/")) != 1)) stop("Dose unit should not be based on body weight or BSA!")
 
 # If EXENDTC is empty, set it as EXSTDTC.
-  for (i in 1:nrow(EX)) {
-    if (EX[i,"EXENDTC"] == "") EX[i,"EXENDTC"] = EX[i,"EXSTDTC"]
-  }
+  if (!("EXENDTC" %in% colnames(EX))) EX[,"EXENDTC"] = ""
+  emptyEnd = is.na(EX[,"EXENDTC"]) | Trim(EX[,"EXENDTC"]) == ""
+  EX[emptyEnd, "EXENDTC"] = EX[emptyEnd, "EXSTDTC"]
 
 # Numeric type column will be set
   colNum = intersect(c("EXDOSE", "EXTPTNUM"), colnames(EX))
-  nCol = length(colNum)
-  for (i in 1:nCol) {
+  for (i in seq_along(colNum)) {
     EX[,colNum[i]] = as.double(EX[,colNum[i]])
   }
 

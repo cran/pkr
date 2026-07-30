@@ -1,49 +1,39 @@
-tblNCA = function(concData, key="Subject", colTime="Time", colConc="conc", dose=0, 
-         adm="Extravascular", dur=0, doseUnit="mg", timeUnit="h", concUnit="ug/L", 
+tblNCA = function(concData, key="Subject", colTime="Time", colConc="conc", dose=0,
+         adm="Extravascular", dur=0, doseUnit="mg", timeUnit="h", concUnit="ug/L",
          down="Linear", MW=0, returnNA=FALSE)
 {
 # Author: Kyun-Seop Bae k@acr.kr
-# Last modification: 2017.8.4
-# Called by: 
-# Calls: sNCA, UT
+# Do NCA for every subject (key) and return a result table.
+# Delegates to NonCompart::tblNCA so that pkr and the author's NonCompart package
+# share one maintained engine. NonCompart::tblNCA already handles multiple keys
+# cleanly (the key columns keep their own names) and binds rows by name, so the
+# earlier positional-rbind and multi-key naming problems no longer arise.
 # INPUT
-#   key: columns names of concData to be shown at the output table
-#   colTime: column for time in concData table
-#   colConc: column for concentration in concData table
-#   dose: vector of dose
-#   adm: administration method, "Extravascular", "Bolus", or "Infusion"
+#   concData: concentration data table
+#   key: column name(s) identifying each profile
+#   colTime: column name for time
+#   colConc: column name for concentration
+#   dose: dose (scalar or one per profile)
+#   adm: "Extravascular", "Bolus", or "Infusion"
 #   dur: duration of infusion
-#   doseUnit: dose unit (not per kg or per m2)
-#   timeUnit: time unit
-#   concUnit: concentration unit
-#   iAUC: data frame for interval AUC. See the example for the detail
-#   down: trapezoidal downward caculation. "Linear" or "Log"
+#   doseUnit, timeUnit, concUnit: units
+#   down: "Linear" or "Log"
 #   MW: molecular weight
-#   returnNA: whether to return NAs or not
+#   returnNA: if FALSE, drop columns that are entirely NA across all profiles
 # RETURNS
-#   table of NCA result
+#   data.frame of NCA results, with a "units" attribute
 
-  nKey = length(key)
-  IDs = as.matrix(unique(concData[,key]), ncol=nKey)
-  nID = nrow(IDs)
+  Res = NonCompart::tblNCA(concData, key=key, colTime=colTime, colConc=colConc,
+                           dose=dose, adm=adm, dur=dur, doseUnit=doseUnit,
+                           timeUnit=timeUnit, concUnit=concUnit, down=down, MW=MW)
 
-  if (length(dose) == 1) {
-    dose = rep(dose, nID)
-  } else if (length(dose) != nID) {
-    stop("Count of dose does not match with number of NCAs!")
+  if (!isTRUE(returnNA)) {
+    Units = attr(Res, "units")
+    keep = vapply(seq_len(ncol(Res)), function(j) !all(is.na(Res[[j]])), logical(1))
+    keep[seq_along(key)] = TRUE  # always keep the key columns
+    Res2 = Res[, keep, drop=FALSE]
+    if (!is.null(Units)) attr(Res2, "units") = Units[keep]
+    Res = Res2
   }
-
-  Res = vector()
-  for (i in 1:nID) {
-    tData = Subset(concData, key, IDs[i,])
-    tRes = sNCA(tData[,colTime], tData[,colConc], dose=dose[i], adm=adm, dur=dur, 
-                doseUnit=doseUnit, timeUnit=timeUnit, concUnit=concUnit, 
-                down=down, MW=MW, returnNA=returnNA)
-    Res = rbind(Res, c(ID=IDs[i,], tRes))
-  }
-  rownames(Res) = NULL
-  attr(Res, "units") = c("", attr(tRes, "units"))
   return(Res)
 }
-
-

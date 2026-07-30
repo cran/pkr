@@ -24,8 +24,8 @@ conduct noncompartmental analysis for many subjects in a data table
   \item{uDose}{unit of dose}
 }
 \details{
-  This function calls \code{IndiNCA} repeatedly to do NCA for each subject.
-  If you specify \code{Report="Text"}, this function returns in free text format to be used in a report file.
+  This function calls \code{sNCA} repeatedly to do NCA for each subject.
+  If you specify \code{report="Text"}, this function returns in free text format to be used in a report file.
 }
 \value{
   \item{CMAX}{maximum concentration, Cmax}

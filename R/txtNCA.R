@@ -5,7 +5,7 @@ txtNCA = function(x, y, dose=0, adm="Extravascular", dur=0, doseUnit="mg", timeU
   n = length(x)
   if (n != length(y)) stop("Length of y is different from the length of x!")
 
-  if (length(y[y > 0]) < 3) return("Too few non-zero points for NCA")
+  if (length(y[!is.na(y) & y > 0]) < 3) return("Too few non-zero points for NCA")
 
   adm = toupper(adm)
   if (adm == "INFUSION" & !(dur > 0)) stop("Infusion mode should have dur larger than 0!")
@@ -63,7 +63,7 @@ txtNCA = function(x, y, dose=0, adm="Extravascular", dur=0, doseUnit="mg", timeU
     iL = 0
     iU = 0
     ypr = NA
-    ype = NA 
+    yre = NA
   }
  # End Making Summary Table
   DateTime = strsplit(as.character(Sys.time())," ")[[1]]
@@ -78,13 +78,13 @@ txtNCA = function(x, y, dose=0, adm="Extravascular", dur=0, doseUnit="mg", timeU
   Result[cLineNo] = "" ; cLineNo = cLineNo + 1
   Result[cLineNo] = "Calculation Setting" ; cLineNo = cLineNo + 1
   Result[cLineNo] = "-------------------" ; cLineNo = cLineNo + 1
-  if (adm == "Bolus") { Adm = "Bolus IV" }
-  else if (adm == "Infusion") { Adm = "Constant Infusion" }
+  if (adm == "BOLUS") { Adm = "Bolus IV" }
+  else if (adm == "INFUSION") { Adm = "Constant Infusion" }
   else { Adm = "Extravascular" }
   Result[cLineNo] = paste("Drug Administration:", Adm) ; cLineNo = cLineNo + 1
   Result[cLineNo] = paste("Observation count excluding trailing zero:", length(x0)) ; cLineNo = cLineNo + 1
   Result[cLineNo] = paste("Dose at time 0:", paste(dose, doseUnit)) ; cLineNo = cLineNo + 1
-  if (adm == "Infusion") {
+  if (adm == "INFUSION") {
     Result[cLineNo] = paste("Length of Infusion:", dur) ; cLineNo = cLineNo + 1
   }
   if (down == "Linear") {
@@ -102,7 +102,7 @@ txtNCA = function(x, y, dose=0, adm="Extravascular", dur=0, doseUnit="mg", timeU
   Result[cLineNo] = "-------------------------" ; cLineNo = cLineNo + 1
   Result[cLineNo] = "      Time         Conc.      Pred.   Residual       AUC       AUMC" ; cLineNo = cLineNo + 1
   Result[cLineNo] = "---------------------------------------------------------------------" ; cLineNo = cLineNo + 1
-  for (i in 1:length(x3)) {
+  for (i in seq_along(x3)) {
     Str = sprintf("%11.4f", Round(x3[i],4))
     if (C0Imputed & i == 1) { Str = paste(Str, "+") }
     else if (i >= iL & i <= iU) { Str = paste(Str, "*") }
@@ -128,7 +128,7 @@ txtNCA = function(x, y, dose=0, adm="Extravascular", dur=0, doseUnit="mg", timeU
 
 
   RetNames = names(Res)
-  for (i in 1:length(RetNames)) {
+  for (i in seq_along(RetNames)) {
     if (RetNames[i] != "b0" & !is.na(Res[RetNames[i]])) {
       SYNO = RptCfg[RptCfg$PPTESTCD==RetNames[i], "SYNONYM"]
       if (RetNames[i] == "LAMZNPT") {
